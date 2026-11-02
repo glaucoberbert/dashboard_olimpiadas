@@ -54,9 +54,12 @@ map_fig = px.choropleth(
 
 # Só pra testar
 
-if __name__ == '__main__':
-    print(df_country_medals.sort_values('Total_Medals', ascending=False).head(10))   # top 10 do mapa
-    map_fig.show()                                                                    # abre o mapa
+# Teste da Etapa 2 (desativado): abria o mapa sozinho com map_fig.show().
+# Foi substituído pelo app.run() lá embaixo, que abre o painel completo com os gráficos.
+
+#if __name__ == '__main__':
+#    print(df_country_medals.sort_values('Total_Medals', ascending=False).head(10))   # top 10 do mapa
+#    map_fig.show()                                                                    # abre o mapa
 
 
 
