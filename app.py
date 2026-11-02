@@ -81,6 +81,21 @@ area_fig = px.area(
     title='Top 10 Países por contagem total de medalhas de 1992 a 2020',   # título do gráfico
 )
 
+# Etapa 4. Adicionando um segundo gráfico, um gráfico de barras mostrando os 10 países 
+# com mais medalhas de ouro durante o mesmo período.
+
+# Soma só a coluna Gold (ouro) por país e pega os 10 maiores.
+# reset_index() faz Country_Name voltar a ser uma coluna normal.
+df_top_countries_gold = df.groupby('Country_Name')['Gold'].sum().nlargest(10).reset_index()
+
+# Gera o gráfico de barras: país no eixo X e quantidade de ouros no eixo Y
+bar_fig = px.bar(
+    df_top_countries_gold,                                            # tabela que alimenta o gráfico
+    x='Country_Name',                                                 # coluna do eixo X (países)
+    y='Gold',                                                         # coluna do eixo Y (medalhas de ouro)
+    title='Top 10 países com mais medalhas de ouro de 1992 a 2020',   # título do gráfico
+)
+
 # Cria o aplicativo Dash (o painel que vai juntar os gráficos)
 app = Dash(__name__)
 
@@ -104,18 +119,5 @@ if __name__ == '__main__':
 
 
 
-# Etapa 4. Adicionando um segundo gráfico, um gráfico de barras mostrando os 10 países 
-# com mais medalhas de ouro durante o mesmo período.
 
-# Soma só a coluna Gold (ouro) por país e pega os 10 maiores.
-# reset_index() faz Country_Name voltar a ser uma coluna normal.
-df_top_countries_gold = df.groupby('Country_Name')['Gold'].sum().nlargest(10).reset_index()
-
-# Gera o gráfico de barras: país no eixo X e quantidade de ouros no eixo Y
-bar_fig = px.bar(
-    df_top_countries_gold,                                            # tabela que alimenta o gráfico
-    x='Country_Name',                                                 # coluna do eixo X (países)
-    y='Gold',                                                         # coluna do eixo Y (medalhas de ouro)
-    title='Top 10 países com mais medalhas de ouro de 1992 a 2020',   # título do gráfico
-)
 
