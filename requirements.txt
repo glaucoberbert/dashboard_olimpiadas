@@ -1,4 +1,11 @@
+# Framework para criar os dashboards interativos usando Python
 dash>=3.0
+
+# Biblioteca para gerar os gráficos interativos que vão dentro do dashboard
 plotly>=5.24
+
+# Biblioteca para manipulação e análise da base de dados (tabelas)
 pandas>=2.0
+
+# Servidor web para colocar o seu aplicativo rodando na internet (em produção)
 gunicorn>=22.0
