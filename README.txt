@@ -1,9 +1,9 @@
 DASHBOARD - QUADRO DE MEDALHAS OLIMPICAS (JOGOS DE VERAO, 1992-2020)
 Disciplina: Visualizacao de Dados - IF Sudeste MG
-Dupla: Glauco Roberto Berbert Souza Costa e [NOME DO COLEGA DA DUPLA]
+Dupla: Glauco Roberto Berbert Souza Costa
 
 LINK DO DASHBOARD NO RENDER:
-[COLE AQUI O LINK .onrender.com]
+https://dashboard-olimpiadas-qkkv.onrender.com/
 
 REPOSITORIO NO GITHUB:
 https://github.com/glaucoberbert/dashboard_olimpiadas
