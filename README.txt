@@ -17,9 +17,9 @@ O QUE O DASHBOARD TEM
 - Mapa com o total de medalhas por pais (verde = mais medalhas, vermelho = menos)
 - Grafico de areas empilhadas com o top 10 paises ao longo dos anos
 - Grafico de barras com o top 10 paises
-- Grafico de pizza: escolhe o pais e mostra o total de Ouro, Prata e Bronze
+- Grafico de pizza: escolhe o pais e o ano (ou todos os anos) e mostra Ouro, Prata e Bronze
 - Filtro de tipo de medalha (Ouro, Prata, Bronze ou Todos): atua no mapa, na area e nas barras
-- Filtro de ano olimpico (pais sede): atua no grafico de barras
+- Filtro de ano olimpico (pais sede): atua no grafico de barras e na pizza
 
 COMO RODAR NO COMPUTADOR
 1) py -m pip install -r requirements.txt

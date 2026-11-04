@@ -177,10 +177,19 @@ def criar_barras(tipo, ano):
 
 # GRÁFICO NOVO (pedido no trabalho): pizza com o total de Ouro, Prata e Bronze de um país.
 
-# Função que cria a PIZZA. Recebe o país escolhido e o tipo de medalha (só pra destacar a fatia).
-def criar_pizza(pais, tipo):
-    # Pega só as linhas do país escolhido e soma cada tipo de medalha (1992 a 2020)
-    totais = df[df['Country_Name'] == pais][['Gold', 'Silver', 'Bronze']].sum()
+# Função que cria a PIZZA. Recebe o país, o tipo de medalha (só pra destacar a fatia) e o ANO escolhido.
+def criar_pizza(pais, tipo, ano):
+    if ano == 'Todos':
+        # Sem filtro de ano: usa a base inteira (1992 a 2020)
+        base = df
+        periodo = 'de 1992 a 2020'
+    else:
+        # Com filtro de ano: fica só com as linhas daquele ano olímpico
+        base = df[df['Year'] == ano]
+        periodo = f"em {ano} (sede: {sedes.loc[ano, 'Host_country']})"
+
+    # Pega só as linhas do país escolhido e soma cada tipo de medalha
+    totais = base[base['Country_Name'] == pais][['Gold', 'Silver', 'Bronze']].sum()
 
     # Monta uma tabelinha com 3 linhas (uma para cada medalha) que o gráfico vai usar.
     # int() converte o número do numpy para um inteiro normal do Python.
@@ -189,6 +198,13 @@ def criar_pizza(pais, tipo):
         'Quantidade': [int(totais['Gold']), int(totais['Silver']), int(totais['Bronze'])],
     })
 
+    # Se o país não ganhou nenhuma medalha naquele ano, a pizza ficaria vazia.
+    # Então avisamos isso no título.
+    if df_pizza['Quantidade'].sum() == 0:
+        titulo = f'{pais} não ganhou medalhas {periodo}'
+    else:
+        titulo = f'Medalhas de {pais} {periodo}'
+
     # Cria a pizza: names = nome de cada fatia / values = tamanho de cada fatia
     pie_fig = px.pie(
         df_pizza,
@@ -196,7 +212,7 @@ def criar_pizza(pais, tipo):
         values='Quantidade',
         color='Medalha',                          # pinta cada fatia de acordo com a medalha
         color_discrete_map=CORES_DA_PIZZA,        # ouro = dourado, prata = cinza, bronze = bronze
-        title=f'Medalhas de {pais} de 1992 a 2020',
+        title=titulo,
     )
 
     # Mostra o número E a porcentagem dentro de cada fatia
@@ -255,11 +271,20 @@ app.layout = html.Div(style={'fontFamily': 'Arial, sans-serif', 'padding': '10px
         dcc.Graph(id='bar-chart', style={'flex': '1'}),
     ], style={'display': 'flex'}),                            # flex = coloca um gráfico ao lado do outro
 
-    # Pizza com o seu próprio filtro de país
+    # Pizza com os seus próprios filtros: país e ano
     html.Div(style={'marginTop': '20px'}, children=[
-        html.Label('Escolha um país para ver a pizza de medalhas:', style={'fontWeight': 'bold'}),
-        dcc.Dropdown(id='filtro-pais', options=PAISES, value='United States of America',
-                     clearable=False, style={'width': '320px'}),
+        html.Div(style={'display': 'flex', 'gap': '40px', 'flexWrap': 'wrap'}, children=[
+            html.Div([
+                html.Label('Escolha um país para ver a pizza de medalhas:', style={'fontWeight': 'bold'}),
+                dcc.Dropdown(id='filtro-pais', options=PAISES, value='United States of America',
+                             clearable=False, style={'width': '320px'}),
+            ]),
+            html.Div([
+                html.Label('Ano olímpico / país sede (pizza):', style={'fontWeight': 'bold'}),
+                dcc.Dropdown(id='filtro-ano-pizza', options=OPCOES_ANO, value='Todos',
+                             clearable=False, style={'width': '320px'}),   # usa as mesmas opções de ano das barras
+            ]),
+        ]),
         dcc.Graph(id='pie-chart'),
     ]),
 ])
@@ -290,14 +315,15 @@ def atualizar_barras(tipo, ano):
     return criar_barras(tipo, ano)
 
 
-# Callback 3: o filtro de país E o filtro de medalha atualizam a PIZZA
+# Callback 3: o filtro de país, o de medalha E o de ano da pizza atualizam a PIZZA (3 entradas)
 @app.callback(
     Output('pie-chart', 'figure'),
     Input('filtro-pais', 'value'),
     Input('filtro-medalha', 'value'),
+    Input('filtro-ano-pizza', 'value'),
 )
-def atualizar_pizza(pais, tipo):
-    return criar_pizza(pais, tipo)
+def atualizar_pizza(pais, tipo, ano):
+    return criar_pizza(pais, tipo, ano)
 
 
 
